@@ -101,3 +101,9 @@ int main() {
     return 0;
 }
 ```
+
+-----
+
+## The resulting image should look like this
+
+![Tree example](https://gitlab.com/pesout/uos-tree/-/raw/main/decistion_tree_example.png)
