@@ -1,93 +1,103 @@
-# uos-tree
+# UOS 4th Seminar Assignments
 
+-----
 
+You work in a company that deals with, among other things, data processing and analysis. Your CTO has decided that for a new project you will use decision trees to make predictions. They have the advantage of being easy to interpret, as well as a simple system of decision rules that your client can easily understand.
 
-## Getting started
+Your colleague prepared a Python script and put it in this GIT repository. The script generates a decision tree from the input dataset and renders it into an image. Now you need to test it.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+However, the production data is unavailable at this time. So it will be up to you to prepare a simple random generator that will return a CSV file that can be used as an input for your colleague's script. It is important for you to make the generation efficient. That is why you have chosen the C language. 
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+But fortunately you remembered that you've already made a simple generator in C (attached below) that returns random weather data. So it's okay to just modify it and then save its output to a file.
 
-## Add your files
+-----
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Your tasks
 
+### 1. Clone this GIT repository
+
+Clone it to the uos server. You can use your home directory for this.
+
+### 2. Verify dependencies
+
+Run a command that verifies that all the necessary Python packages (in requirements.txt) are installed and if not, install them. Try to run `tree.py` script using `python3`. This should check that the necessary packages are available. However, the script will return an error that it did not find the CSV file with the data.
+
+### 3. Prepare a C generator
+
+Prepare a C program which generates the input data. Since we are dealing with [classification](https://www.simplilearn.com/tutorials/machine-learning-tutorial/classification-in-machine-learning#what_is_classification), it is important that these are records that belong to different classes.
+
+In the example below, for instance, the random weather data for each day is included along with information about raining tomorrow. The decision tree can then be used as a simple system of rules that will generally determine if it rains tomorrow.
+
+Also in your case, each row have to have information about the class (raining / not raining, healthy / sick, etc.). The recommendation is to have two classes for simplicity, but you can have more (not raining / raining a little / raining a lot).
+
+If you want to use the code below, edit at least
+
+- dataset size,
+- header names,
+- columns count,
+- columns value ranges.
+
+### 4. Save output into a file
+
+The resulting generator from the previous step should be set up to return a data dump to standard output (stdout). 
+
+At this stage, you will need to compile the program. If it doesn't contain any syntax errors, the compilator should create an executable binary in your current directory.
+
+Now run the compiled program and redirect its output to a file named `data.csv`. This data file should be located in the same directory as the `tree.py` script.
+
+### 5. Run the Python script and get the result
+
+Try to run `tree.py` script using `python3` again. If everything is okay, the script will print your dataset to stdout and generate an image with a decision tree visualization. This image should be named `decistion_tree.png`. Download it to your computer, for example using WinSCP and have a look.
+
+-----
+
+## Bonus tasks for extra points
+
+1. Create your own GIT repository on GitHub, GitLab or Bitbucket. Create and push a commit that contains your modifications - the C program, the decision tree image, and generated `data.csv` file.
+
+2. Create a bash script that automates the entire process: clone the repository, run the C program, save the output to `data.csv`, and run the Python script that generates the decision tree.
+
+3. Redesign the C program so that it creates the `data.csv` file directly after execution and doesn't return its contents to the standard output.
+
+-----
+
+## Your OG generator written in C
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int random(int min, int max) {
+
+    // Random number in interval [min, max]
+    return rand() % (max - min + 1) + min;
+}
+
+int main() {
+
+    // Number of records in the dataset
+    const int DATASET_SIZE = 50;
+
+    // Seed random number generator with current time
+    srand(time(NULL));
+
+    printf("%s\n", // Dataset header (must match the number of columns)
+        "clouds,a_pressure,temperature,humidity,rainy_tomorrow"
+    );
+
+    for (int i = 0; i < DATASET_SIZE; i++) {
+
+        printf(
+            "%d,%d,%d,%d,%s\n",
+            random(0, 100),                     // clouds in %
+            random(970, 1050),                  // atmospheric pressure in hPa 
+            random(-10, 35),                    // temperature in °C
+            random(30, 95),                     // relative humidity in %
+            random(0, 1) ? "\"yes\"" : "\"no\"" // rainy or not
+        );
+    }
+
+    return 0;
+}
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/pesout/uos-tree.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/pesout/uos-tree/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
