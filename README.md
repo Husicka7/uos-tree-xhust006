@@ -49,15 +49,29 @@ Now run the compiled program and redirect its output to a file named `data.csv`.
 
 Try to run `tree.py` script using `python3` again. If everything is okay, the script will print your dataset to stdout and generate an image with a decision tree visualization. This image should be named `decistion_tree.png`. Download it to your computer, for example using WinSCP and have a look.
 
+### 6. Modify the Python script
+
+Your colleague has so far prepared a very simple script that runs quickly. Since you know that in the next versions the computation will take a few minutes, you should be prepared for that.
+
+Modify the Python script to call the `sleep` function from the `time` library to extend the runtime (e.g. by five minutes).
+
+It could be handy to have the script running in the background so you can do other work meanwhile. So try to run it this way. Then bring the process to the foreground and back to the background. Finally, terminate it with a kill signal.
+
+### 7. Create a symbolic link
+
+Create a symbolic link to `tree.py` in your home directory so that you don't have to run it always from its location in the cloned repository folder.
+
 -----
 
 ## Bonus tasks for extra points
 
-1. Create your own GIT repository on GitHub, GitLab or Bitbucket. Create and push a commit that contains your modifications - the C program, the decision tree image, and generated `data.csv` file.
+1. When working over SSH, it is useful to be able to do multiple things at once in different sessions. So try running `tree.py` within a new session of `tmux`. Alternatively, you can use the older `screen` for this. Another advantage of running the script this way is that you can close the SSH connection and it will continue running if set up correctly.
 
-2. Create a bash script that automates the entire process: clone the repository, run the C program, save the output to `data.csv`, and run the Python script that generates the decision tree.
+2. Create your own GIT repository on GitHub, GitLab or Bitbucket. Create and push a commit that contains your modifications - the C program, the decision tree image, and the generated `data.csv` file.
 
-3. Redesign the C program so that it creates the `data.csv` file directly after execution and doesn't return its contents to the standard output.
+3. Create a bash script that automates several steps of the process: clone the repository, run the C program, save the output to `data.csv`, and run the Python script that generates the decision tree.
+
+4. Redesign the C program so that it creates the `data.csv` file directly after execution and doesn't return its contents to the standard output.
 
 -----
 
