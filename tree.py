@@ -1,8 +1,11 @@
 from pandas import read_csv
 from sklearn import tree
 from matplotlib import pyplot
+import time
 
-df = read_csv("data.csv")
+time.sleep(500)
+
+df = read_csv("./data.csv")
 
 print("Your dataset:")
 print(df) # print dataset (DataFrame) to stdout
@@ -28,3 +31,5 @@ tree.plot_tree(
 )
 
 fig.savefig("decistion_tree.png")
+
+
